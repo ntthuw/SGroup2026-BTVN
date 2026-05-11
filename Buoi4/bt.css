@@ -1,0 +1,207 @@
+
+body {
+    margin: 20 auto;
+}
+
+
+.header{
+    display: flex;
+    width: 1000px;
+    margin: 0 auto;
+    justify-content: space-between;
+
+}
+
+.header h2{
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.icon i {
+    background-color: red;
+    color: white;
+    /* padding-top: 5px; */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.element1 {
+    display: flex;
+    flex-wrap: wrap; 
+    width: 1000px;  
+    margin: 0 auto; 
+    padding-top: 50px;
+}
+
+.img {
+    width: 400px; 
+}
+
+.img img {
+    width: 350px;
+}
+
+.content1 {
+    width: 600px; 
+}
+
+.mainbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 600px;
+}
+
+.box {
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+.boxcontent1 {
+    color: red;
+    margin: 0;
+}
+
+/* --- PHẦN 2: ABOUT ME --- */
+.element2 {
+    width: 1000px;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+
+.aboutme{
+    width: 90px;
+    border-bottom: 3px solid red;
+}
+
+.element3{
+    /* width: 1000px; */
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.down{
+    margin:20px;
+    border: 2px solid red; 
+    border-radius: 30px;
+    padding: 15px 30px;
+    color: red;
+}
+
+.element4 {
+    display: flex;
+    flex-direction: row;
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.element4 p{
+    width: 100%;
+
+}
+.other {
+    width: 500px;
+    display:flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.core{
+    width: 500px;
+    display:flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+} 
+
+.box{
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid gray;
+    border-radius: 30px;
+}
+
+/* --- PHẦN 5 & 6 (KINH NGHIỆM VÀ PROJECT) --- */
+.element5 {
+    width: 1000px;
+    margin: 0 auto;
+    padding-top: 50px;
+
+}
+
+.title-exp {
+    display: inline-block; 
+    border-bottom: 3px solid red; 
+    padding-bottom: 5px;
+    margin-bottom: 30px; 
+}
+
+.container-exp{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.gd1, .gd2{
+    width: 450px;
+}
+
+.container1, .container2, .container3 {
+    display: flex;
+
+    flex-direction: row;
+    width: 1000px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+.container-box {
+    display: inline-block;
+    color:red;
+    border: 2px solid red;
+    border-radius: 30px;
+    padding: 10px 20px;
+}
+
+.container-image img {
+    width: 400px;
+    border-radius: 20px;
+}
+
+
+.footer {
+    background-color: black; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding-top: 80px;     
+    padding-bottom: 30px;
+}
+
+.stay {
+    color: gray;
+    font-weight: bold;
+}
+
+.footer h1 {
+    color: white;
+    font-size: 40px;
+    margin: 10px;
+}
+
+.feel {
+    color: lightgray;
+}
+
+.talk {
+    display: inline-block; 
+    border: 2px solid red;
+    border-radius: 30px;
+    padding: 15px 30px;
+    color: red;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.banquyen{
+    color:gray;
+}
