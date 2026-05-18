@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô phỏng TSP - PBL1</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        #app-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        canvas {
+            background-color: #f8fafd;
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            cursor: crosshair;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #btn-run {
+            background-color: #4285f4;
+            color: white;
+        }
+        #btn-run:hover { background-color: #3367d6; }
+        #btn-reset {
+            background-color: #f1f3f4;
+            color: #3c4043;
+        }
+        #btn-reset:hover { background-color: #e8eaed; }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <canvas id="simCanvas" width="800" height="450"></canvas>
+    
+    <div class="controls">
+        <button id="btn-run" onclick="runGreedyAlgorithm()">1. Quét Thuật Toán (Tham Lam)</button>
+        <button id="btn-reset" onclick="initMap()">Tải lại bản đồ (Reset)</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let bins = [];
+    const NUM_BINS = 25;
+    const DEPOT = { x: 400, y: 225, isDepot: true };
+    let route = [];
+
+    // Khởi tạo bản đồ ngẫu nhiên
+    function initMap() {
+        bins = [];
+        route = [];
+        
+        for (let i = 0; i < NUM_BINS; i++) {
+            // Đảm bảo không đè lên Depot
+            let bx = Math.random() * 700 + 50;
+            let by = Math.random() * 350 + 50;
+            let capacity = Math.floor(Math.random() * 100);
+            
+            bins.push({
+                id: i + 1,
+                x: bx,
+                y: by,
+                capacity: capacity,
+                collected: false
+            });
+        }
+        drawMap();
+    }
+
+    // Vẽ toàn bộ bản đồ
+    function drawMap() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Vẽ lưới (Grid)
+        ctx.strokeStyle = "#eaebec";
+        ctx.lineWidth = 1;
+        for(let i=0; i<canvas.width; i+=50) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke(); }
+        for(let j=0; j<canvas.height; j+=50) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke(); }
+
+        // Vẽ Lộ trình (Nếu có)
+        if (route.length > 0) {
+            ctx.beginPath();
+            ctx.moveTo(DEPOT.x, DEPOT.y);
+            ctx.strokeStyle = "#fbbc04"; // Đường màu vàng cam
+            ctx.lineWidth = 3;
+            ctx.setLineDash([5, 5]);
+            
+            for (let i = 0; i < route.length; i++) {
+                ctx.lineTo(bins[route[i]].x, bins[route[i]].y);
+            }
+            ctx.lineTo(DEPOT.x, DEPOT.y); // Quay về trạm
+            ctx.stroke();
+            ctx.setLineDash([]); // Reset nét đứt
+        }
+
+        // Vẽ các thùng rác
+        bins.forEach(bin => {
+            let color = "#34a853"; // Xanh lá (Mặc định - Trống)
+            if (!bin.collected) {
+                if (bin.capacity >= 80) color = "#ea4335"; // Đỏ (Ưu tiên)
+                else if (bin.capacity >= 50) color = "#f9ab00"; // Cam (Tiện đường)
+                else color = "#9aa0a6"; // Xám (Bỏ qua)
+            }
+
+            // Vẽ thùng
+            ctx.beginPath();
+            ctx.arc(bin.x, bin.y, 12, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = "#202124";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Nhãn % mức rác
+            ctx.fillStyle = "#202124";
+            ctx.font = "11px Arial";
+            ctx.textAlign = "center";
+            let label = bin.collected ? "0%" : bin.capacity + "%";
+            
+            // Background cho nhãn %
+            ctx.fillStyle = "white";
+            ctx.fillRect(bin.x - 14, bin.y + 16, 28, 14);
+            ctx.strokeRect(bin.x - 14, bin.y + 16, 28, 14);
+            
+            ctx.fillStyle = color;
+            ctx.fillText(label, bin.x, bin.y + 27);
+        });
+
+        // Vẽ Depot (Trạm)
+        ctx.fillStyle = "#4285f4";
+        ctx.fillRect(DEPOT.x - 20, DEPOT.y - 15, 40, 30);
+        ctx.strokeStyle = "#174ea6";
+        ctx.strokeRect(DEPOT.x - 20, DEPOT.y - 15, 40, 30);
+        ctx.fillStyle = "white";
+        ctx.font = "bold 12px Arial";
+        ctx.fillText("DEPOT", DEPOT.x, DEPOT.y + 4);
+    }
+
+    // Thuật toán TSP Tham Lam (Greedy)
+    function runGreedyAlgorithm() {
+        route = [];
+        let currentPos = { x: DEPOT.x, y: DEPOT.y };
+        let unvisited = bins.map((bin, index) => ({...bin, originalIndex: index}))
+                            .filter(bin => bin.capacity >= 50); // Chỉ lấy thùng >= 50%
+
+        while (unvisited.length > 0) {
+            let nearestIdx = -1;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < unvisited.length; i++) {
+                let dist = Math.hypot(currentPos.x - unvisited[i].x, currentPos.y - unvisited[i].y);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    nearestIdx = i;
+                }
+            }
+
+            // Đưa vào lộ trình và đánh dấu đã thu gom
+            let targetBin = unvisited[nearestIdx];
+            route.push(targetBin.originalIndex);
+            bins[targetBin.originalIndex].collected = true; // Hiệu ứng biến thành 0% xanh lá
+            
+            currentPos = { x: targetBin.x, y: targetBin.y };
+            unvisited.splice(nearestIdx, 1);
+        }
+        
+        drawMap();
+    }
+
+    // Chạy lần đầu
+    initMap();
+</script>
+
+</body>
+</html>

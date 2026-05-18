@@ -1,0 +1,60 @@
+body {
+    background-color: black;
+    margin: 0;
+}
+
+.container {
+    padding: 100px;
+    display: flex; 
+    justify-content: center;
+}
+
+.anh1, .anh2 {
+    display: inline-block; 
+    position: relative; 
+    height: 250px;
+    background-color: blue; 
+    margin: 0 20px; 
+}
+
+.anh1 img, .anh2 img {
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    object-fit: cover; 
+    transition: transform 0.4s ease, opacity 0.4s ease; 
+}
+
+.caption {
+    position: absolute; 
+    bottom: 30px;
+    left: 40px;  
+    color: white;
+}
+
+.caption h2 {
+    margin: 0;
+    font-size: 30px;
+    transition: transform 0.4s ease; 
+}
+
+.caption p {
+    margin: 10px 0 0;
+    opacity: 0; 
+    transform: translateY(20px);
+    transition: transform 0.4s ease, opacity 0.4s ease; 
+}
+
+.anh1:hover img, .anh2:hover img {
+    opacity: 1; 
+    transform: scale(1.15); 
+}
+
+.anh1:hover .caption h2, .anh2:hover .caption h2 {
+    transform: translateY(-10px); 
+}
+
+.anh1:hover .caption p, .anh2:hover .caption p {
+    opacity: 1; 
+    transform: translateY(0); 
+}
