@@ -1,4 +1,8 @@
 
+*{
+    margin:0;
+    padding: 0;
+}
 body {
     margin: 20 auto;
 }
@@ -63,7 +67,6 @@ body {
     margin: 0;
 }
 
-/* --- PHẦN 2: ABOUT ME --- */
 .element2 {
     width: 1000px;
     margin: 0 auto;
@@ -76,7 +79,7 @@ body {
 }
 
 .element3{
-    /* width: 1000px; */
+   
     display:flex;
     flex-direction: row;
     justify-content: center;
@@ -121,7 +124,6 @@ body {
     border-radius: 30px;
 }
 
-/* --- PHẦN 5 & 6 (KINH NGHIỆM VÀ PROJECT) --- */
 .element5 {
     width: 1000px;
     margin: 0 auto;
